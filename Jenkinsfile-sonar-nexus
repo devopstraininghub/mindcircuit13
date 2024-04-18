@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+	tools {
+    jdk 'JAVA1.8'
+
+  }
+
+    stages {
+        stage('CLONE SCM') {
+            steps {
+                echo 'cloning code from Github'
+				git branch: 'main', url: 'https://github.com/devopstraininghub/webapp1.git'
+            }
+        }
+			
+		stage('SONARQUBE ANALYSIS') {
+            steps {
+                echo 'SONARQUBE ANALYSIS'
+				sh 'mvn clean sonar:sonar'
+            }
+        }
+		
+		
+		stage('Build Artifact AND PUSHING TO NEXUS') {
+            steps {
+                echo 'Build Artifact with maven build tool'
+				sh 'mvn clean deploy'
+            }
+        }
+		
+		stage('Deploy') {
+            steps {
+                echo 'Deploy to tomcat ap/n server '
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://3.83.227.87:8081/')], contextPath: 'facebook', war: '**/*.war'
+            }
+        }
+    }
+}

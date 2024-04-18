@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+	
+	tools {
+    jdk 'JAVA1.8'
+
+  }
+
+    stages {
+        stage('CLONE SCM') {
+            steps {
+                echo 'cloning code from Github'
+				git branch: 'main', url: 'https://github.com/devopstraininghub/webapp1.git'
+            }
+        }
+		
+
+		
+			
+		stage('Build Artifact') {
+            steps {
+                echo 'Build Artifact with maven build tool'
+				sh 'mvn clean sonar:sonar deploy'
+            }
+        }
+		
+		
+		stage('Deploy') {
+            steps {
+                echo 'Deploy to tomcat ap/n server '
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://34.224.5.225:8081/')], contextPath: 'b12book', war: '**/*.war'
+            }
+        }
+    }
+}
