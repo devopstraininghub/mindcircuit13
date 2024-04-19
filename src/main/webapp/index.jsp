@@ -17,6 +17,6 @@
     </style>
 </head>
 <body>
-    <h1> WELCOME TO Batch13 DEVOPS FACEBOOK PAGE</h1>
+    <h1> MIND CIRCUIT TRAINING INSTITUTE - We don't just train people; we COACH, MENTOR, and BUILD PEOPLE!</h1>
 </body>
 </html>
