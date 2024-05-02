@@ -22,7 +22,7 @@
 		 </snapshotRepository>
 		
 		<repository>
-		    <id>nexusRepo</id>
+		    <id>NexusRepo</id>
 		    <url>http://35.175.63.142:8081/repository/mc-webapp-release/</url>
 		</repository>
   	</distributionManagement>
