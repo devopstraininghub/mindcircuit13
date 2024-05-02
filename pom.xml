@@ -17,13 +17,13 @@
 
 	<distributionManagement>
 		 <snapshotRepository>
-		    <id>nexusRepo</id>
-		    <url>http://54.236.16.181:8081/repository/batch12-snapshots/</url>
+		    <id>NexusRepo</id>
+		    <url>http://35.175.63.142:8081/repository/mc-webapp-snapshot/</url>
 		 </snapshotRepository>
 		
 		<repository>
 		    <id>nexusRepo</id>
-		    <url>http://54.236.16.181:8081/repository/batch12-release/</url>
+		    <url>http://35.175.63.142:8081/repository/mc-webapp-release/</url>
 		</repository>
   	</distributionManagement>
 	
