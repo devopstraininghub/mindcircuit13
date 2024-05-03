@@ -1,0 +1,44 @@
+
+
+pipeline {
+    agent any
+    tools{
+        jdk 'jdk-8'
+    }
+
+    stages {
+        stage('git') {
+            steps {
+                echo 'scm'
+				git branch: 'main', url: 'https://github.com/devopstraininghub/mindcircuit13.git'
+            }
+        }
+		
+		stage('sonar') {
+            steps {
+                echo 'scanning project'
+			    sh 'mvn sonar:sonar'
+            }
+        }
+		
+		stage('build') {
+            steps {
+                echo 'generating artifact using maven build tool'
+			    sh 'mvn clean install'
+            }
+        }
+		
+		stage('nexus artifactory') {
+            steps {
+                echo 'publish to nexus'
+			    sh 'mvn  deploy'
+            }
+        }
+		stage('deploy to tomcat') {
+            steps {
+                echo 'tomcat deploy'
+			    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://100.25.144.30:8091/')], contextPath: 'mc-app-batch13', war: '**/*.war'
+            }
+        }
+    }
+}
