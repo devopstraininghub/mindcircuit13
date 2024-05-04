@@ -18,12 +18,12 @@
 	<distributionManagement>
 		 <snapshotRepository>
 		    <id>nexusRepo</id>
-		    <url>http://100.25.13.89:8081/repository/batch13-repository-snapshot/</url>
+		    <url>http://100.25.220.62:8081/repository/nexus-snapshot/</url>
 		 </snapshotRepository>
 		
 		<repository>
 		    <id>nexusRepo</id>
-		    <url>http://100.25.13.89:8081/repository/batch13-repository-release/</url>
+		    <url>http://100.25.220.62:8081/repository/nexus-release/</url>
 		</repository>
   	</distributionManagement>
 	
