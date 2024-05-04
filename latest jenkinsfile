@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+tools {
+    jdk 'jdk8'
+
+  }
+    stages {
+        stage('clone scm') {
+            steps {
+                echo 'cloning the scm code into jenkins'
+				git branch: 'main', url: 'https://github.com/emmedishettynk/mindcircuit13.git'
+            }
+        }
+		
+		stage('sonarqube code review') {
+            steps {
+                echo 'reviewing the code with sonarqube for any bugs,vulnerabilities,code smell'
+				sh 'mvn clean compile sonar:sonar'
+            }
+			}
+			stage('code build') {
+            steps {
+                echo 'building the artifact'
+				sh 'mvn clean install'
+            }
+			}
+			stage('upload war to nexus repository') {
+            steps {
+                echo 'uploading the war file to the Nexus Artifactory'
+				sh 'mvn deploy'
+            }
+			}
+			stage('deploy war into tomcat webserver') {
+            steps {
+                echo 'deploying the war into tomcat webserver'
+				deploy adapters: [tomcat9(credentialsId: '0df6b6f2-5739-4fbe-a08c-75b73d1c48b2', path: '', url: 'http://100.25.3.137:8080/')], contextPath: 'mc-app-naveen', war: '**/*.war'
+            }
+			
+        }
+		
+    }
+}
