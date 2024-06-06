@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+    tools {
+       maven "maven3"
+    	}//TOOLS
+options {
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
+   }//OPTIONS
+   triggers{
+        pollSCM('* * * * *')
+   }//TRIGGERS
+
+    stages {
+        stage('CodeCheckOut') {
+            steps {
+                // Get some code from a GitHub repository
+                git branch:"${params.BranchName}", credentialsId: 'eed417c8-0ed2-4d2e-874b-3ad18f79a53b', url: 'https://github.com/devopsenggr/maven-web-application.git'
+                sh "echo The person name is: ${params.PersonName}"
+                  }
+
+                              }//Stage('CodeCheckOut')
+	stage('Build'){
+		steps{
+			sh "mvn clean package"
+			}	
+			}//stage('Build')
+	stage('SonarQube'){
+		steps{
+			sh "mvn sonar:sonar"
+			}	
+			}//stage('SonarQube')
+	stage('UploadArtifactsToNexus'){
+		steps{
+			sh "mvn deploy"
+			}	
+			}//stage('UploadArtifactsToNexus')
+			
+	stage('DeployToTomcat'){
+		steps{
+			sshagent(['038dabd8-ac29-4305-9422-909ae74aed03']) {
+     sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.233.144.251:/opt/apache-tomcat-9.0.85/webapps/"
+			}	
+			}
+			}//stage('DeployToTomcat')
+	stage('EmailNotification'){
+		steps{
+			mail bcc: '', body: '''hello
+
+Regards,
+hjhghg''', cc: '', from: '', replyTo: '', subject: 'hello', to: 'awstraining42@gmail.com'
+			}	
+			}//stage('EmailNotification')
+        }//stages closing
+post{
+ success{
+ mail bcc: '', body: '''Build Over - Success..
+
+ Regards,
+ Software Solutions,
+ 9980923226''', cc: 'awstraining42@gmail.com', from: '', replyTo: '', subject: 'Build over!...', to: 'awstraining42@gmail.com'
+ }
+ 
+ failure{
+ mail bcc: '', body: '''Build Over - Failure..
+
+ Regards,
+ Software Solutions,
+ 9980923226''', cc: 'awstraining42@gmail.com', from: '', replyTo: '', subject: 'Build over!...', to: 'awstraining42@gmail.com'
+ }
+
+}//post closing
+    }//pipeline closing
