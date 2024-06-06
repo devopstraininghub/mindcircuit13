@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: mc-app
-        image: devopsenggr/7:5
+        image: devopsenggr/cicdT:5
         ports:
         - containerPort: 8080
 
