@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dynamic Landing Page</title>
+    <title>Dynamic Landing Pages</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
